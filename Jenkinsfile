@@ -1,5 +1,5 @@
 pipeline{ 
-    agent none
+    agent any
     environment{ 
         HARBOR_URL = 'harbor.registry.local/nodejs-app'
         IMAGE_NAME = 'new'
@@ -8,9 +8,6 @@ pipeline{
     }
     stages{ 
         stage('Build Image'){ 
-            agent{ 
-                label "Built-In Node"
-            }
             steps{ 
                 script{ 
                     sh 'ip a'
@@ -20,9 +17,6 @@ pipeline{
             }
         }
         stage('Push the image to the Harbor'){ 
-            agent {
-                label 'Built-In Node'
-            }
             steps{ 
                 script{ 
                     sh "docker login harbor.registry.local -u admin -p Harbor12345"
