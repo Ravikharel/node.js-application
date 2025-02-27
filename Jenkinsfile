@@ -9,7 +9,7 @@ pipeline{
     stages{ 
         stage('Build Image'){ 
             agent{ 
-                label "master"
+                label "Built-In Node"
             }
             steps{ 
                 script{ 
@@ -21,7 +21,7 @@ pipeline{
         }
         stage('Push the image to the Harbor'){ 
             agent {
-                label 'master'
+                label 'Built-In Node'
             }
             steps{ 
                 script{ 
