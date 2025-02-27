@@ -1,5 +1,5 @@
 pipeline{ 
-    agnet none
+    agent none
     environment{ 
         HARBOR_URL = 'harbor.registry.local/nodejs-app'
         IMAGE_NAME = 'new'
