@@ -19,7 +19,7 @@ pipeline{
         stage('Push the image to the Harbor'){ 
             steps{ 
                 script{ 
-                    sh "docker login harbor.registry.local -u admin -p Harbor12345"
+                    sh "echo Harbor12345 | docker login harbor.registry.local -u admin --password-stdin"
                     sh "docker push ${HARBOR_URL}/${IMAGE_NAME}:${IMAGE_TAG}"
                 }
 
@@ -31,7 +31,7 @@ pipeline{
             }
             steps{ 
                 script{ 
-                    sh 'docker login harbor.registry.local -u admin -p Harbor12345'
+                    sh "echo Harbor12345 | docker login harbor.registry.local -u admin --password-stdin"
                     sh "docker pull ${HARBOR_URL}/${IMAGE_NAME}:${IMAGE_TAG}"
                     sh "docker container run -d -p 3000:3000 --name ${CONTAINER}  ${HARBOR_URL}/${IMAGE_NAME}:${IMAGE_TAG}"
                 }
