@@ -1,7 +1,5 @@
 pipeline{ 
-    agent{ 
-        label 'vagrant1'
-    }
+    agnet none
     environment{ 
         HARBOR_URL = 'harbor.registry.local/nodejs-app'
         IMAGE_NAME = 'new'
@@ -10,6 +8,9 @@ pipeline{
     }
     stages{ 
         stage('Build Image'){ 
+            agent{ 
+                label "master"
+            }
             steps{ 
                 script{ 
                     sh 'ip a'
@@ -19,6 +20,9 @@ pipeline{
             }
         }
         stage('Push the image to the Harbor'){ 
+            agent {
+                label 'master'
+            }
             steps{ 
                 script{ 
                     sh "docker login harbor.registry.local -u admin -p Harbor12345"
@@ -28,9 +32,14 @@ pipeline{
             }
         }
         stage("Build the container"){ 
+            agent { 
+                label 'vagrant1'
+            }
             steps{ 
                 script{ 
-                    sh "docker container run -d -p 3000:3000 --name ${CONTAINER}"
+                    sh 'docker login harbor.registry.local -u admin -p Harbor12345'
+                    sh "docker pull ${HARBOR_URL}/${IMAGE_NAME}:${IMAGE_TAG}"
+                    sh "docker container run -d -p 3000:3000 --name ${CONTAINER}  ${HARBOR_URL}/${IMAGE_NAME}:${IMAGE_TAG}"
                 }
             }
         }
